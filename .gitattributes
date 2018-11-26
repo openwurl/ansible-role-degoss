@@ -1,2 +1,0 @@
-# when exporting this repository (presumably for Ansible Galaxy), ignore these paths
-.tests/ export-ignore
