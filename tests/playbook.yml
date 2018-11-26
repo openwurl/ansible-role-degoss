@@ -30,6 +30,29 @@
           a: b
           c: d
 
+- name: pass-source-dir
+  hosts: all
+  become: true
+  any_errors_fatal: true
+  roles:
+    - role: degoss
+      degoss_clean: false
+      degoss_debug: true
+      goss_source_dir: tests/
+      goss_file: goss.yml
+      goss_addtl_dirs: [tests/goss]
+      goss_env_vars:
+        distro: "{{ ansible_distribution | lower }}"
+        should: "pass"
+        boolean: true
+        list:
+          - one
+          - two
+          - three
+        dict:
+          a: b
+          c: d
+
 - name: fail
   hosts: all
   become: true
@@ -40,6 +63,30 @@
       degoss_debug: true
       goss_file: goss.yml
       goss_addtl_dirs: [goss]
+      goss_env_vars:
+        distro: "{{ ansible_distribution | lower }}"
+        should: "fail"
+        boolean: true
+        list:
+          - one
+          - two
+          - three
+        dict:
+          a: b
+          c: d
+      when: fail is defined
+
+- name: fail-source-dir
+  hosts: all
+  become: true
+  any_errors_fatal: true
+  roles:
+    - role: degoss
+      degoss_clean: false
+      degoss_debug: true
+      goss_source_dir: tests/
+      goss_file: goss.yml
+      goss_addtl_dirs: [tests/goss]
       goss_env_vars:
         distro: "{{ ansible_distribution | lower }}"
         should: "fail"

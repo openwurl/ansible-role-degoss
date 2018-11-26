@@ -34,6 +34,8 @@ Variables affecting the runtime of Goss.
 <dl>
   <dt><code>goss_file</code></dt>
   <dd>A Goss test file to run on the target machine.</dd>
+  <dt><code>goss_source_dir</code></dt>
+  <dd>The directory, local to the playbook, to look for the Goss test file. Only affects goss_file</dd>
   <dt><code>goss_addtl_files</code></dt>
   <dd>Additional Goss test files to copy to the machine.</dd>
   <dt><code>goss_addtl_dirs</code></dt>
@@ -52,26 +54,36 @@ None.
 
 ### Single Test File
 
-Fetches the latest version of Goss and executes the `tests/goss.yml` file.
+Fetches the latest version of Goss and executes the `goss.yml` file locally.
 
 ```yaml
 ---
 - name: test
   hosts: all
   roles:
-    - { role: degoss, goss_file: tests/goss.yml }
+    - { role: degoss, goss_file: goss.yml }
+```
+
+Uses a custom directory
+
+```yaml
+---
+- name: test
+  hosts: all
+  roles:
+    - { role: degoss, goss_source_dir: tests/, goss_file: goss.yml }
 ```
 
 ### Pinned Version
 
-Downloads a specific version of Goss and executes the `tests/goss.yml` file.
+Downloads a specific version of Goss and executes the `goss.yml` file locally.
 
 ```yaml
 ---
 - name: test
   hosts: all
   roles:
-    - { role: degoss, goss_version: 0.2.5, goss_file: tests/goss.yml }
+    - { role: degoss, goss_version: 0.2.5, goss_file: goss.yml }
 ```
 
 ### Multiple Files and Directories
@@ -109,6 +121,19 @@ In this case, `distro` will be available to Goss at runtime at `{{.Env.distro}}`
 ## License
 
 MIT
+
+## Development
+In order to use the Makefile to test you will need two variables, `IMAGE_NAME` and `ROLE_NAME`.
+
+* `ROLE_NAME`
+  * This role, `degoss`
+* `IMAGE_NAME`
+  * one of:
+    * `IMAGE_NAME: "naftulikay/centos-vm:7"`
+    * `IMAGE_NAME: "naftulikay/xenial-vm:latest"`
+    * `IMAGE_NAME: "naftulikay/trusty-vm:latest"`
+* Example
+  * `IMAGE_NAME=naftulikay/xenial-vm:latest ROLE_NAME=degoss make test-clean`
 
 ---
 
